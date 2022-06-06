@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 #extragere date
 filesize = os.path.getsize("Proiectlp2.txt")
-if filesize == 3:
+if filesize == 0:
     URL = "https://data.primariatm.ro/dataset/8dd25f96-0e3f-4624-8565-a8d2183d27ce/resource/bb0189fd-2d87-4db1-a6cd-9ef2c71d7450/download/cai-aeriene-transport-aerian.csv"
     with requests.Session() as s:
            download = s.get(URL)
@@ -36,7 +36,7 @@ else:
             for j in range(len(data)-1):
                 matrix_data[i][j] = data[j]
 
-#initialize tkinker
+#initialize tkinter
 root=Tk()
 menu = Menu(root)
 root.config(menu=menu)
@@ -200,37 +200,63 @@ data.add_command(label="Afisare grafic numar total marfuri transport aerian",com
 def media1():
     #interfata tkinker afisare medie
     from tkinter import ttk
-    def callback():
-        l2.configure(text=cmb.get())
+    #def callback():
+        #l2.configure(text=cmb.get())
 
-    def media_p():
-        m=0
-        s = 0
-        for i in range(1, 15):
-            s = s + int(matrix_data[i][2])
-            m=(float(s / 14))
     window = Tk()
-    window.title('Căi Aeriene,Transport Aerian')
+    window.title('Media valori')
     window.geometry('300x200')
-
-    course = ["Numar pasageri","Miscari aeronave", "Numar total marfuri transport aerian"]
+    nr1="Numar pasageri"
+    nr2="Numar total marfuri transport aerian"
+    nr3="Miscari aeronave"
+    course = [nr1,nr2,nr3]
 
     l1 = Label(window, text="Alege un indicator")
     l1.grid(column=0, row=0)
     cmb = ttk.Combobox(window, values=course, width=30)
     cmb.grid(column=0, row=1)
     cmb.current(0)
+    #numar pasageri
+    def media_p():
+        s = 0
+        for i in range(1, 16):
+            s = s + int(matrix_data[i][2])
+        return float(s/14)
+    #numar total marfuri
+    def media_m():
+        s = 0
+        for i in range(15, 29):
+            s = s + int(matrix_data[i][2])
+        return float(s / 14)
+    #miscari aeronave
+    def media_a():
+        s = 0
+        for i in range(29, 43):
+            s = s + int(matrix_data[i][2])
+        return float(s / 14)
 
-    btn = Button(window, text="Afiseaza media valorilor",command=media_p)
+    def med():
+         l2 = Label(window, text="                                        ")
+         l2.grid(column=0, row=3)
+
+         if cmb.get() == nr1:
+                l2 = Label(window,text=(media_p()))
+                l2.grid(column=0, row=3)
+         if cmb.get() == nr2:
+                l2 = Label(window, text=(media_m()))
+                l2.grid(column=0, row=3)
+         if cmb.get() == nr3:
+                l2 = Label(window, text=(media_a()))
+                l2.grid(column=0, row=3)
+
+    btn = Button(window, text="Afiseaza media valorilor",command=med)
     btn.grid(column=0, row=2)
 
-    l2 = Label(window, text="")
-    l2.grid(column=0, row=3)
     window.mainloop()
 
 media = Menu(menu)
 menu.add_cascade(label="Media valorilor",menu=media)
-media.add_command(label="Afisare media valorilor numar pasageri",command=media1)
+media.add_command(label="Afisare media valorilor in functie de indicator",command=media1)
 #show data in a table  && replace , with . and replace . with " "
 for i in range(len(matrix_data)):
     for j in range(len(matrix_data[0])):
@@ -243,5 +269,5 @@ for i in range(len(matrix_data)):
         entry.grid(row=i, column=j)
         entry.insert(END, matrix_data[i][j])
 root.mainloop()
-print("dhchjkdsa")
+
 
