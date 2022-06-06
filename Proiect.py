@@ -243,5 +243,5 @@ for i in range(len(matrix_data)):
         entry.grid(row=i, column=j)
         entry.insert(END, matrix_data[i][j])
 root.mainloop()
-
+print("dhchjkdsa")
 
